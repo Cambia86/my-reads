@@ -19,46 +19,8 @@ class BooksApp extends React.Component {
     }
 
     AddBook(shelf, book) {
-       /* book.shelf = shelf;
-        this.state.bookList.push(book);
-*/
         this.state.bookList.push(book)
-
-        BooksAPI.update(book, shelf).then((books) => {
-            let _bookLst = this.state.bookList;
-            let booksCopy = {
-                currentlyReading: [],
-                read: [],
-                wantToRead: []
-            };
-
-            // change shelf
-            if (_bookLst.filter((bookItm) => bookItm.id === book.id) != undefined
-                && _bookLst.filter((bookItm) => bookItm.id === book.id)[0] !== undefined) {
-
-                let selBook = _bookLst.filter((bookItm) => bookItm.id === book.id)[0]
-                selBook.shelf = shelf;
-            }
-
-            // create book object
-            books.currentlyReading.map((item)=> {
-                booksCopy.currentlyReading.push(_bookLst.filter((book) => book.id === item)[0])
-            });
-
-            books.read.map((item)=> {
-                booksCopy.read.push(_bookLst.filter((book) => book.id === item)[0])
-            });
-
-            books.wantToRead.map((item)=> {
-                booksCopy.wantToRead.push(_bookLst.filter((book) => book.id === item)[0])
-            });
-
-            books = booksCopy;
-            this.setState({books})
-        })
-
-       /* book.shelf = shelf;
-        this.state.bookList.push(book);*/
+        this.UpdateBook(book, shelf)
     }
 
     UpdateBook(book, shelf) {
@@ -121,7 +83,7 @@ class BooksApp extends React.Component {
                     <SearchBook
                         bookList={bookList}
                         onAddBook={(shelf, book)=> {
-                            this.AddBook( shelf,book)
+                            this.AddBook(shelf, book)
                             history.push('/')
                         }}
                     ></SearchBook>
