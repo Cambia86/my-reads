@@ -16,17 +16,6 @@ class BooksApp extends React.Component {
     componentDidMount() {
         BooksAPI.getAll().then((bookList) => {
             this.setState({bookList})
-            let currentlyReading = bookList != null ? bookList.filter((c) => c.shelf === 'currentlyReading') : []
-            let wantToRead = bookList != null ? bookList.filter((c) => c.shelf === 'wantToRead') : []
-            let read = bookList != null ? bookList.filter((c) => c.shelf === 'read') : []
-
-            let books = {
-                currentlyReading: currentlyReading,
-                wantToRead: wantToRead,
-                read: read
-            };
-
-            this.setState({books})
         })
     }
 
@@ -37,12 +26,8 @@ class BooksApp extends React.Component {
     }
 
     AddBook(shelf,book){
-        if(shelf==='currentlyReading')
-            this.state.books.currentlyReading.push(book);
-        if(shelf==='wantToRead')
-            this.state.books.wantToRead.push(book);
-        if(shelf==='read')
-            this.state.books.read.push(book);
+        book.shelf=shelf;
+        this.state.bookList.push(book);
     }
 
     UpdateBook(book, shelf) {
@@ -77,10 +62,21 @@ class BooksApp extends React.Component {
     }
 
     render() {
+        let bookList = this.state.bookList;
+        let currentlyReading = bookList != null ? bookList.filter((c) => c.shelf === 'currentlyReading') : []
+        let wantToRead = bookList != null ? bookList.filter((c) => c.shelf === 'wantToRead') : []
+        let read = bookList != null ? bookList.filter((c) => c.shelf === 'read') : []
+
+        let books = {
+            currentlyReading: currentlyReading,
+            wantToRead: wantToRead,
+            read: read
+        };
+
         return (
             <div className="app">
                 <Route exact path='/' render={() => (
-                    <ListBook books={this.state.books}
+                    <ListBook books={books}
                               onUpdateBook={(book, shelf)=> {
                                   this.UpdateBook(book, shelf)
                               }}
