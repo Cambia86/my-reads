@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import {Route} from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import  ListBook from './ListBook'
 import SearchBook from './SearchBook'
@@ -9,8 +9,7 @@ class BooksApp extends React.Component {
     state = {
         showSearchPage: true,
         bookList: [],
-        books: {},
-        searchResult:[]
+        books: {}
     }
 
     componentDidMount() {
@@ -19,15 +18,45 @@ class BooksApp extends React.Component {
         })
     }
 
-    SearchBook(query,maxResult){
-        BooksAPI.search(query,maxResult).then((searchResult)=>{
-            this.setState({searchResult})
-        })
-    }
-
-    AddBook(shelf,book){
-        book.shelf=shelf;
+    AddBook(shelf, book) {
+        book.shelf = shelf;
         this.state.bookList.push(book);
+
+        BooksAPI.update(book, shelf).then((books) => {
+            let _bookLst = this.state.bookList;
+            let booksCopy = {
+                currentlyReading: [],
+                read: [],
+                wantToRead: []
+            };
+
+            // change shelf
+            if (_bookLst.filter((bookItm) => bookItm.id === book.id) != undefined
+                && _bookLst.filter((bookItm) => bookItm.id === book.id)[0] !== undefined) {
+
+                let selBook = _bookLst.filter((bookItm) => bookItm.id === book.id)[0]
+                selBook.shelf = shelf;
+            }
+
+            // create book object
+            books.currentlyReading.map((item)=> {
+                booksCopy.currentlyReading.push(_bookLst.filter((book) => book.id === item)[0])
+            });
+
+            books.read.map((item)=> {
+                booksCopy.read.push(_bookLst.filter((book) => book.id === item)[0])
+            });
+
+            books.wantToRead.map((item)=> {
+                booksCopy.wantToRead.push(_bookLst.filter((book) => book.id === item)[0])
+            });
+
+            books = booksCopy;
+            this.setState({books})
+        })
+
+       /* book.shelf = shelf;
+        this.state.bookList.push(book);*/
     }
 
     UpdateBook(book, shelf) {
@@ -40,8 +69,12 @@ class BooksApp extends React.Component {
             };
 
             // change shelf
-            if (_bookLst.filter((bookItm) => bookItm.id === book.id)[0] !== undefined)
-                _bookLst.filter((bookItm) => bookItm.id === book.id)[0].shelf = shelf;
+            if (_bookLst.filter((bookItm) => bookItm.id === book.id) != undefined
+                && _bookLst.filter((bookItm) => bookItm.id === book.id)[0] !== undefined) {
+
+                let selBook = _bookLst.filter((bookItm) => bookItm.id === book.id)[0]
+                selBook.shelf = shelf;
+            }
 
             // create book object
             books.currentlyReading.map((item)=> {
@@ -84,12 +117,8 @@ class BooksApp extends React.Component {
                 )}/>
                 <Route path='/search' render={({history}) => (
                     <SearchBook
-                        searchResult={this.state.searchResult}
-                        onSearchBook={(query,maxResult)=> {
-                            this.SearchBook(query,maxResult)
-                        }}
-                        onAddBook={(shelf,book)=>{
-                            this.AddBook(shelf,book)
+                        onAddBook={(shelf, book)=> {
+                            this.UpdateBook( book,shelf)
                             history.push('/')
                         }}
                     ></SearchBook>

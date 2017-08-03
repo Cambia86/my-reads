@@ -1,12 +1,24 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
+import * as BooksAPI from './BooksAPI'
 
 class SearchBook extends Component {
+    state = {
+        searchResult:[]
+    }
 
 
     handleChange(query, maxResult) {
-        this.props.onSearchBook(query, maxResult)
+        BooksAPI.search(query,maxResult).then((res)=>{
+            let searchResult=null
+            if(res != undefined && res.error != undefined){
+                searchResult= res.items
+            }else{
+                searchResult=res;
+            }
+            this.setState({searchResult})
+        })
     }
 
     onAddBook(shelf,book){
@@ -14,7 +26,7 @@ class SearchBook extends Component {
     }
 
     render() {
-        const searchResult = this.props.searchResult !== undefined ? this.props.searchResult:[]
+        const searchResult = this.state.searchResult!== undefined ? this.state.searchResult:[];
 
         return (
             <div className="search-books">
@@ -37,7 +49,7 @@ class SearchBook extends Component {
                                             backgroundImage: `url(${book.imageLinks.smallThumbnail})`
                                         }}></div>
                                         <div className="book-shelf-changer">
-                                            <select value='none'  onChange={(event)=> this.onAddBook(event.target.value,book)}>
+                                            <select value={book.shelf} onChange={(event)=> this.onAddBook(event.target.value,book)}>
                                                 <option value="none" disabled>Move to...</option>
                                                 <option value="currentlyReading">Currently Reading</option>
                                                 <option value="wantToRead">Want to Read</option>
@@ -58,8 +70,6 @@ class SearchBook extends Component {
 }
 
 SearchBook.propTypes={
-    searchResult: PropTypes.array.isRequired,
-    onSearchBook: PropTypes.func.isRequired,
     onAddBook: PropTypes.func.isRequired
 }
 
