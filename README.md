@@ -62,3 +62,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
 
 For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Installing and launching
+
+- Open command line: run -> git clone https://github.com/Cambia86/my-reads.git
+- Navigate into the folder 
+- At level of file named package.json run -> npm install
+- run -> npm run start 
+- in your localhost at port 3000 must be the project
+
