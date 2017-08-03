@@ -37,7 +37,7 @@ class SearchBook extends Component {
                                             backgroundImage: `url(${book.imageLinks.smallThumbnail})`
                                         }}></div>
                                         <div className="book-shelf-changer">
-                                            <select value={book.shelf}  onChange={(event)=> this.onAddBook(event.target.value,book)}>
+                                            <select value='none'  onChange={(event)=> this.onAddBook(event.target.value,book)}>
                                                 <option value="none" disabled>Move to...</option>
                                                 <option value="currentlyReading">Currently Reading</option>
                                                 <option value="wantToRead">Want to Read</option>
