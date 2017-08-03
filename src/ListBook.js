@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 class ListBook extends Component {
 
     render() {
-        const {books}=this.props
+            const {books}=this.props
 
         let currentlyReading = books.currentlyReading
         let wantToRead =  books.wantToRead

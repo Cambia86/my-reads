@@ -19,8 +19,10 @@ class BooksApp extends React.Component {
     }
 
     AddBook(shelf, book) {
-        book.shelf = shelf;
+       /* book.shelf = shelf;
         this.state.bookList.push(book);
+*/
+        this.state.bookList.push(book)
 
         BooksAPI.update(book, shelf).then((books) => {
             let _bookLst = this.state.bookList;
@@ -117,8 +119,9 @@ class BooksApp extends React.Component {
                 )}/>
                 <Route path='/search' render={({history}) => (
                     <SearchBook
+                        bookList={bookList}
                         onAddBook={(shelf, book)=> {
-                            this.UpdateBook( book,shelf)
+                            this.AddBook( shelf,book)
                             history.push('/')
                         }}
                     ></SearchBook>
