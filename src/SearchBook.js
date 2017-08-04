@@ -28,14 +28,14 @@ class SearchBook extends Component {
 
     render() {
         const searchResult = this.state.searchResult !== undefined ? this.state.searchResult : [];
-        let _bookList = this.props.bookList;
 
-        _bookList.forEach(function (curBook) {
-            searchResult.forEach(function (searchBook) {
-                if (curBook.id === searchBook.id)
-                    Object.assign(searchBook, curBook)
-            });
-        });
+        this.props.bookList.map(function (curBook) {
+                searchResult.map(function (searchBook) {
+                    if (curBook.id === searchBook.id)
+                        searchBook.shelf = curBook.shelf
+                })
+            }
+        )
 
         return (
             <div className="search-books">
