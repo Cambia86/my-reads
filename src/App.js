@@ -19,7 +19,18 @@ class BooksApp extends React.Component {
     }
 
     AddBook(shelf, book) {
-        this.state.bookList.push(book)
+
+        let resultSearchBook = this.state.bookList.filter(function (curBook) {
+            if (curBook.id === book.id)
+                return true
+        });
+
+        if (resultSearchBook.length == 0) {
+            this.state.bookList.push(book)
+        }
+        else{
+            resultSearchBook[0].shelf =shelf;
+        }
         this.UpdateBook(book, shelf)
     }
 
